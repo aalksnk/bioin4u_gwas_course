@@ -70,7 +70,7 @@ Examples of large-scale GWAS studies:
 pan-UK analysis in UKBB biobank 
 Japanese Biobank flagship paper 
 China Kandoorie biobank 
-FinnGen[https://www.nature.com/articles/s41586-022-05473-8](url)
+[FinnGen]((https://www.nature.com/articles/s41586-022-05473-8))
 
 # Ліцензія
-Всі матеріали курсу, включно із кодом, демонстраційними даними та візуальними матеріалами ліцензовані на умовах [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1)). Ви можете вільно використовувати, поширювати, змінювати та адаптувати матеріали курсу для будь-яких цілей, за умови вказання відповідного авторства.
+Всі матеріали курсу, включно із кодом, демонстраційними даними та візуальними матеріалами ліцензовані на умовах [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1). Ви можете вільно використовувати, поширювати, змінювати та адаптувати матеріали курсу для будь-яких цілей, за умови вказання відповідного авторства.
