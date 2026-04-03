@@ -47,3 +47,30 @@
 Ноутбук №4: гайд із функціональної інтерпретації.
 
 5–6 — Презентації проєктів
+
+## Корисна інформація
+
+GWAS and main concepts:
+
+Best GWAS article ever
+Linkage disequilibrium 
+Mendelian randomization in cardiometabolic disease: Challenges in evaluating causality. 
+An introduction to basic statistical models in genetics. 
+
+HLA GWASs:
+Genome-wide association and HLA region fine-mapping studies identify susceptibility loci for multiple common infections
+Genome-wide association study identifies multiple HLA loci for sarcoidosis susceptibility
+What has GWAS done for HLA and disease associations?
+eQTL:
+Mapping the dynamic genetic regulatory architecture of HLA genes at single-cell resolution
+pQTL:
+The influence of HLA genetic variation on plasma protein expression
+
+Examples of large-scale GWAS studies:
+pan-UK analysis in UKBB biobank 
+Japanese Biobank flagship paper 
+China Kandoorie biobank 
+FinnGen[https://www.nature.com/articles/s41586-022-05473-8](url)
+
+# Ліцензія
+Всі матеріали курсу, включно із кодом, демонстраційними даними та візуальними матеріалами ліцензовані на умовах C[reative Commons Attribution 4.0 International (CC BY 4.0)]([url](https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1)). Ви можете вільно використовувати, поширювати, змінювати та адаптувати матеріали курсу для будь-яких цілей, за умови вказання відповідного авторства.
