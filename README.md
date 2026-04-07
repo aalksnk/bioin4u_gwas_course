@@ -66,15 +66,11 @@ Mapping the dynamic genetic regulatory architecture of HLA genes at single-cell 
 pQTL:
 The influence of HLA genetic variation on plasma protein expression
 
-Examples of large-scale GWAS studies:
-
-pan-UK analysis in UKBB biobank
-
-Japanese Biobank flagship paper
-
-China Kandoorie biobank 
-
-[FinnGen](https://www.nature.com/articles/s41586-022-05473-8)
+**Examples of large-scale GWAS studies:**
+- [pan-UK analysis in UKBB biobank](https://www.medrxiv.org/content/10.1101/2024.03.13.24303864v1)
+- [Japanese Biobank flagship paper](https://www.nature.com/articles/s41588-021-00931-x)
+- [China Kandoorie biobank](https://pubmed.ncbi.nlm.nih.gov/37601966/) 
+- [FinnGen](https://www.nature.com/articles/s41586-022-05473-8)
 
 # Ліцензія
 Всі матеріали курсу, включно із кодом, демонстраційними даними та візуальними матеріалами ліцензовані на умовах [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/?ref=chooser-v1). Ви можете вільно використовувати, поширювати, змінювати та адаптувати матеріали курсу для будь-яких цілей, за умови вказання відповідного авторства.
