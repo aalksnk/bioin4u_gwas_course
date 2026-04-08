@@ -52,28 +52,29 @@
 
 GWAS and main concepts:
 
-Best GWAS article ever
+[Best GWAS article ever](https://research.vu.nl/ws/portalfiles/portal/155815846/Genome_wide_association_studies.pdf)
 
-Linkage disequilibrium
+[Linkage disequilibrium](https://doi.org/10.1038/nrg2361)
 
-Mendelian randomization in cardiometabolic disease: Challenges in evaluating causality.
-
-An introduction to basic statistical models in genetics. 
+[Mendelian randomization in cardiometabolic disease: Challenges in evaluating causality.](https://doi.org/10.1038/nrcardio.2017.78)
+[
+An introduction to basic statistical models in genetics.](https://doi.org/10.4236/ojs.2021.116060)
 
 HLA GWASs:
-Genome-wide association and HLA region fine-mapping studies identify susceptibility loci for multiple common infections
 
-Genome-wide association study identifies multiple HLA loci for sarcoidosis susceptibility
+[Genome-wide association and HLA region fine-mapping studies identify susceptibility loci for multiple common infections](https://www.nature.com/articles/s41467-017-00257-5#Sec19)
 
-What has GWAS done for HLA and disease associations?
+[Genome-wide association study identifies multiple HLA loci for sarcoidosis susceptibility](https://pmc.ncbi.nlm.nih.gov/articles/PMC10407706/)
+
+[What has GWAS done for HLA and disease associations?](https://onlinelibrary.wiley.com/doi/10.1111/iji.12332)
 
 eQTL:
 
-Mapping the dynamic genetic regulatory architecture of HLA genes at single-cell resolution
+[Mapping the dynamic genetic regulatory architecture of HLA genes at single-cell resolution](https://www.nature.com/articles/s41588-023-01586-6)
 
 pQTL:
-
-The influence of HLA genetic variation on plasma protein expression
+[
+The influence of HLA genetic variation on plasma protein expression](https://www.nature.com/articles/s41467-024-50583-8)
 
 **Examples of large-scale GWAS studies:**
 - [pan-UK analysis in UKBB biobank](https://www.medrxiv.org/content/10.1101/2024.03.13.24303864v1)
