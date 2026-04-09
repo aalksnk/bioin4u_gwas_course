@@ -1,0 +1,96 @@
+```{r}
+#if you don't have the packages installed
+#install.packages("data.table")
+#install.packages("dplyr")
+#install.packages("ggplot2")
+#install.packages("topr")
+
+library(data.table)
+library(dplyr)
+library(ggplot2)
+library(topr)
+```
+
+```{r}
+sumstats <- fread("/Users/anastasiiaalekseienko/Downloads/MVP_t1d_sumstats_cropped.txt.gz")
+head(sumstats)
+```
+
+```{r}
+#check how many variants we have
+nrow(sumstats)
+```
+
+```{r}
+#QC - chromosomes
+sort(unique(sumstats$chromosome))
+length(unique(sumstats$chromosome))
+```
+
+```{r}
+sumstats$beta <- log(sumstats$odds_ratio)
+```
+
+
+```{r}
+hist(
+  sumstats$effect_allele_frequency,
+  breaks = 200,                     # number of bins
+  main = "Effect Allele Frequency",
+  xlab = "Effect allele frequency",
+  col = "lightblue",
+  border = "white"
+)
+```
+
+```{r}
+hist(
+  sumstats$beta,
+  breaks = 50,                     # number of bins
+  main = "Beta",
+  xlab = "Beta",
+  col = "lightblue",
+  border = "white"
+)
+```
+
+```{r}
+min(sumstats$p_value, na.rm = TRUE)
+max(sumstats$p_value, na.rm = TRUE)
+```
+
+```{r}
+top5 <- sumstats[order(sumstats$p_value), ][1:5, ]
+top5
+```
+
+```{r}
+top5_beta <- sumstats[order(sumstats$beta), ][1:5, ]
+top5_beta
+```
+
+```{r}
+# Ensure the data contains the necessary columns: SNP, CHR, BP, and P
+# Adjust column names if needed
+colnames(sumstats)[colnames(sumstats) == "SNP"] <- "rsid"
+colnames(sumstats)[colnames(sumstats) == "CHR"] <- "chromosome"
+colnames(sumstats)[colnames(sumstats) == "BP"] <- "base_pair_location"
+colnames(sumstats)[colnames(sumstats) == "P"] <- "p_value"
+
+# Generate the Manhattan plot using the topr package
+manhattan_plot <- manhattan(
+  sumstats, 
+  annotate = c(5e-8), 
+  color = c("#FFB000"), 
+  label_fontface = "italic", 
+  scale = 0.9, 
+  nudge_y = 20, 
+  sign_thresh = 5e-8, 
+  protein_coding_only = TRUE
+)
+
+# View the plot
+manhattan_plot
+```
+
+
