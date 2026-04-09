@@ -63,6 +63,11 @@ max(sumstats$p_value, na.rm = TRUE)
 top5 <- sumstats[order(sumstats$p_value), ][1:5, ]
 top5
 ```
+```{r}
+top5_beta <- sumstats[order(sumstats$beta), ][1:5, ]
+top5_beta
+```
+
 
 ```{r}
 # Ensure the data contains the necessary columns: SNP, CHR, BP, and P
