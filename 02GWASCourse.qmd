@@ -1,0 +1,40 @@
+```{r}
+library(data.table)
+```
+
+
+FUMA приймає файли мені за 600 MB, тож якщо файл більший, доведеться урізати
+
+Як можна це зробити:
+- фільтрувати по частоті аллелі (effect_allele_frequency > 0.1/0.01 & effect_allele_frequency < 0.9/0.99)
+- фільтрувати по p value (p<5e-8)
+
+
+```{r}
+sumstats <- fread("/Users/anastasiiaalekseienko/Downloads/MVP_t1d_sumstats_cropped.txt.gz")
+colnames(sumstats)
+```
+
+```{r}
+# fuma любить не спрацювати, якщо не спрацює через ERROR003, варто зробити ось це і не використовувати колонки chromosome та base_pair_location
+
+sumstats$base_pair_location <- as.integer(sumstats$base_pair_location)
+options(scipen = 999)
+
+gz_con <- gzfile("/Users/anastasiiaalekseienko/Downloads/MVP_t1d_sumstats_cropped_v1.txt.gz", "wt")
+write.table(
+  sumstats,
+  gz_con,
+  sep = "\t",
+  quote = FALSE,
+  row.names = FALSE
+)
+close(gz_con)
+```
+
+
+
+# Як читати результати FUMA
+Детальний розбір тут https://fuma.ctglab.nl/tutorial#snp2gene
+
+
