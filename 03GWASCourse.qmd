@@ -6,7 +6,7 @@ library(dplyr)
 
 
 ```{r}
-sumstats <- fread("/gpfs/space/GI/GV/Projects/SAMPO/temp_aa/MVP_t1d_sumstats_cropped.txt.gz")
+sumstats <- fread("/path/MVP_t1d_sumstats_cropped.txt.gz")
 colnames(sumstats)
 ```
 
