@@ -1,0 +1,208 @@
+
+```{r}
+library(data.table)
+library(dplyr)
+```
+
+
+```{r}
+sumstats <- fread("/gpfs/space/GI/GV/Projects/SAMPO/temp_aa/MVP_t1d_sumstats_cropped.txt.gz")
+colnames(sumstats)
+```
+
+
+```{r}
+window_size <- 500e3
+lead_p <- 5e-8   # change if needed
+
+# Sort once
+ord <- order(sumstats$chromosome, sumstats$base_pair_location)
+sumstats <- sumstats[ord, ]
+
+# Initialize
+sumstats$locus_id <- NA_integer_
+sumstats$is_lead <- FALSE
+
+# Candidate lead SNPs: only significant ones
+sig_idx <- which(!is.na(sumstats$p_value) & sumstats$p_value <= lead_p)
+
+# Process candidates in order of strongest association first
+sig_idx <- sig_idx[order(sumstats$p_value[sig_idx])]
+
+current_locus <- 0L
+lead_rows <- integer(0)
+
+for (idx in sig_idx) {
+  # Skip if this SNP is already covered by an existing locus
+  if (!is.na(sumstats$locus_id[idx])) next
+
+  current_locus <- current_locus + 1L
+  sumstats$is_lead[idx] <- TRUE
+  lead_rows <- c(lead_rows, idx)
+
+  chr_i <- sumstats$chromosome[idx]
+  pos_i <- sumstats$base_pair_location[idx]
+
+  in_window <- which(
+    is.na(sumstats$locus_id) &
+    sumstats$chromosome == chr_i &
+    sumstats$base_pair_location >= (pos_i - window_size) &
+    sumstats$base_pair_location <= (pos_i + window_size)
+  )
+
+  sumstats$locus_id[in_window] <- current_locus
+}
+```
+
+```{r}
+
+locus_summary <- sumstats %>%
+  filter(!is.na(locus_id)) %>%
+  group_by(locus_id) %>%
+  summarise(
+    chromosome = first(chromosome),
+    start_bp   = min(base_pair_location),
+    end_bp     = max(base_pair_location),
+    lead_snp   = rsid[which.min(p_value)],
+    lead_p     = min(p_value, na.rm = TRUE),
+    n_snps     = n()
+  ) %>%
+  arrange(lead_p)
+
+head(locus_summary)
+```
+
+```{r}
+#################################################
+## LD-free ABF fine-mapping ##
+#################################################
+
+## ---------------------------
+## 1. Parameters
+## ---------------------------
+
+W <- 0.2^2
+P_MIN <- 1e-300
+window_size <- 500e3
+
+## ---------------------------
+## 2. Checks + preprocessing
+## ---------------------------
+
+setDT(sumstats)
+
+required_cols <- c(
+  "rsid", "chromosome", "base_pair_location",
+  "odds_ratio", "p_value"
+)
+stopifnot(all(required_cols %in% names(sumstats)))
+
+# Keep only usable rows
+sumstats <- sumstats[
+  !is.na(odds_ratio) &
+  !is.na(p_value) &
+  !is.na(chromosome) &
+  !is.na(base_pair_location)
+]
+
+# Remove MHC region
+sumstats <- sumstats[
+  !(chromosome == 6 &
+    base_pair_location >= 25e6 &
+    base_pair_location <= 35e6)
+]
+
+## ---------------------------
+## 3. Derive beta, Z, SE
+## ---------------------------
+
+# Clamp p-values safely
+sumstats[, p_safe := fifelse(p_value < P_MIN, P_MIN,
+                      fifelse(p_value > 1, 1, p_value))]
+
+sumstats[, beta := log(odds_ratio)]
+sumstats[, Z := qnorm(1 - p_safe / 2) * sign(beta)]
+
+# Uninformative SNPs
+sumstats[, zero_z := abs(Z) < 1e-8]
+
+# Standard errors
+sumstats[, se := fifelse(!zero_z, abs(beta / Z), Inf)]
+
+## ---------------------------
+## 4. Wakefield ABF
+## ---------------------------
+
+sumstats[, V := se^2]
+sumstats[, ABF := NA_real_]
+
+idx <- !sumstats$zero_z & is.finite(sumstats$V)
+
+sumstats[idx, ABF :=
+  sqrt(V / (V + W)) *
+  exp((Z^2 * W) / (2 * (V + W)))
+]
+
+# Neutral evidence for uninformative SNPs
+sumstats[zero_z == TRUE, ABF := 1]
+
+if (all(is.na(sumstats$ABF))) {
+  stop("All ABFs are NA — check input data.")
+}
+
+## ---------------------------
+## 5. Posterior inclusion probabilities
+## ---------------------------
+
+abf_sum <- sum(sumstats$ABF, na.rm = TRUE)
+sumstats[, PIP := ABF / abf_sum]
+
+## ---------------------------
+## 6. Credible set
+## ---------------------------
+
+setorder(sumstats, -PIP)
+sumstats[, cumPIP := cumsum(PIP)]
+
+# Include the first SNP that pushes cumulative PIP above 0.95
+cs_idx <- which(sumstats$cumPIP >= 0.95)[1]
+
+if (is.na(cs_idx) || length(cs_idx) == 0L) {
+  cs_idx <- nrow(sumstats)
+}
+
+credible_95 <- sumstats[1:cs_idx]
+
+cat("\n95% credible set size:", nrow(credible_95), "\n")
+```
+
+```{r}
+top5_pip <- sumstats[order(-PIP)][1:min(5, .N),
+  .(rsid, chromosome, base_pair_location, p_value, PIP)
+]
+
+print(top5_pip)
+```
+
+```{r}
+hist(
+  sumstats$PIP[sumstats$PIP > 0.001],
+  breaks = 50,
+  main = "PIP > 0.001",
+  xlab = "PIP"
+)
+```
+
+
+```{r}
+plot(
+  -log10(sumstats$p_value),
+  sumstats$PIP,
+  pch = 20,
+  col = rgb(0, 0, 0, 0.4),
+  xlab = "-log10(p)",
+  ylab = "PIP"
+)
+```
+
+
